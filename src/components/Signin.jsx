@@ -1,16 +1,20 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 
 const Signin = ({ history }) => {
   const { register, handleSubmit, errors } = useForm();
-
+  const [error,setError] = useState("");
   const onSubmit = async (values) => {
     const res = await axios.post("http://localhost:8000/api/v1/users/login", values);
     if(res.data.ok === true && res.data.token!=null ){
       history.push("/dashboard");
+    }
+    else{
+      setError("Email or Password is incorrect");
+      console.log(error);
     }
   };
 
@@ -53,6 +57,8 @@ const Signin = ({ history }) => {
               })}
             />
           </div>
+          <div className="text-danger">{error}</div>
+
           <button type="submit" className="mt-3 btn btn-primary w-100 btn-lg">
             Sign In
           </button>
@@ -63,6 +69,8 @@ const Signin = ({ history }) => {
           </Link>
           </div>
         </form>
+
+        
       </div>
     </>
   );
