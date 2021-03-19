@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import Cart from './Cart';
 import Dashboard from './Dashboard';
 import Home from './Home';
 import Navbar from './Navbar';
@@ -84,6 +85,11 @@ const App = () => {
           path='/dashboard'
           isAuthenticated={isAuthenticated}
           component={Dashboard}
+        />
+        <PrivateRoute
+          path='/cart'
+          isAuthenticated={isAuthenticated}
+          component={Cart}
         />
         <PublicRoute
           path='/signin'
