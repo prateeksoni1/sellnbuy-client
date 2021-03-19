@@ -7,6 +7,14 @@ import Navbar from './Navbar';
 import Signin from './Signin';
 import Signup from './Signup';
 
+const PublicRoute = ({ path, isAuthenticated, component: Component }) => {
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
+
+  return <Route path={path} component={Component} />;
+};
+
 const PrivateRoute = ({ path, isAuthenticated, component: Component }) => {
   if (!isAuthenticated) {
     return <Redirect to='/signin' />;
@@ -62,9 +70,22 @@ const App = () => {
           isAuthenticated={isAuthenticated}
           component={Dashboard}
         />
-        <Route path='/signin' component={Signin} />
-        <Route path='/signup' component={Signup} />
-        <Route path='/' component={Home} exact />
+        <PublicRoute
+          path='/signin'
+          isAuthenticated={isAuthenticated}
+          component={Signin}
+        />
+        <PublicRoute
+          path='/signup'
+          isAuthenticated={isAuthenticated}
+          component={Signup}
+        />
+        <PublicRoute
+          path='/'
+          isAuthenticated={isAuthenticated}
+          component={Home}
+          exact
+        />
       </Switch>
     </BrowserRouter>
   );
