@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
+  
   return (
     <nav
       style={{ height: '5vh' }}
@@ -24,6 +25,7 @@ const Navbar = () => {
         </button>
         <div className='collapse navbar-collapse' id='navbarText'>
           <ul className='ms-auto navbar-nav mb-2 mb-lg-0'>
+            
             <li className='nav-item'>
               <Link className='nav-link' to='/signin'>
                 Sign in
