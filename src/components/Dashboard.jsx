@@ -4,12 +4,10 @@ import axios from "axios";
 
 const Dashboard = (req,res) => {
   useEffect(() => {
-    console.log(req);
-    console.log(res);
     axios
       .get("http://localhost:8000/api/v1/products", {
         headers: {
-        //   authorization: `Bearer ${token}`,
+           authorization: `Bearer ${localStorage.getItem('authToken')}`,
         },
       })
       .then((response) => {
