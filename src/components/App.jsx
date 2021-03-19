@@ -7,7 +7,7 @@ import Home from './Home';
 import Navbar from './Navbar';
 import Signin from './Signin';
 import Signup from './Signup';
-
+import AddProduct from './AddProduct';
 const PublicRoute = ({
   path,
   isAuthenticated,
@@ -28,18 +28,22 @@ const PublicRoute = ({
   );
 };
 
-const PrivateRoute = ({ path, isAuthenticated, component: Component }) => {
+const PrivateRoute = ({
+  path,
+  isAuthenticated,
+  component: Component,
+  userEmail,
+}) => {
   if (!isAuthenticated) {
     return <Redirect to='/signin' />;
   }
-
   return (
     <Route
       path={path}
       render={routeParams => (
         <>
           <Navbar isAuthenticated={isAuthenticated} />
-          <Component {...routeParams} />
+          <Component {...routeParams} userEmail={userEmail} />
         </>
       )}
     />
@@ -49,7 +53,6 @@ const PrivateRoute = ({ path, isAuthenticated, component: Component }) => {
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     if (loading) {
       (async () => {
@@ -90,7 +93,12 @@ const App = () => {
           path='/cart'
           isAuthenticated={isAuthenticated}
           component={Cart}
-        />
+          />
+          <PrivateRoute
+          path='/addProduct'
+          isAuthenticated={isAuthenticated}
+          component={AddProduct}
+          />
         <PublicRoute
           path='/signin'
           isAuthenticated={isAuthenticated}

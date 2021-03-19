@@ -8,6 +8,7 @@ const Dashboard = () => {
   useEffect(() => {
     (async () => {
       try {
+        //   console.log(req,res)
         const response = await axios.get(
           'http://localhost:8000/api/v1/products',
           {
