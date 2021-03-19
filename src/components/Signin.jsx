@@ -15,11 +15,13 @@ const Signin = ({ history }) => {
       );
 
       if (res.data.ok && res.data.token) {
-        localStorage.setItem("authToken",res.data.token);
+        localStorage.setItem('authToken', res.data.token);
         history.push('/dashboard');
       }
     } catch (err) {
-      setError(err.response.data.message);
+      if (!err.response) {
+        setError('Internal Server Error');
+      } else setError(err.response.data.message);
     }
   };
 
