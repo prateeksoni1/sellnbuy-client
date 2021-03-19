@@ -1,44 +1,44 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import Dashboard from './Dashboard';
-import Home from './Home';
-import Navbar from './Navbar';
-import Signin from './Signin';
-import Signup from './Signup';
-
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import Dashboard from "./Dashboard";
+import Home from "./Home";
+import Navbar from "./Navbar";
+import Signin from "./Signin";
+import Signup from "./Signup";
+import AddProduct from "./AddProduct"
 const PublicRoute = ({
   path,
   isAuthenticated,
   component: Component,
   setIsAuthenticated,
+  setUserEmail
 }) => {
   if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
+    return <Redirect to="/dashboard" />;
   }
 
   return (
     <Route
       path={path}
-      render={routeParams => (
-        <Component {...routeParams} setIsAuthenticated={setIsAuthenticated} />
+      render={(routeParams) => (
+        <Component {...routeParams} setIsAuthenticated={setIsAuthenticated} setUserEmail={setUserEmail} />
       )}
     />
   );
 };
 
-const PrivateRoute = ({ path, isAuthenticated, component: Component }) => {
+const PrivateRoute = ({ path, isAuthenticated, component: Component, userEmail }) => {
   if (!isAuthenticated) {
-    return <Redirect to='/signin' />;
+    return <Redirect to="/signin" />;
   }
-
   return (
     <Route
       path={path}
-      render={routeParams => (
+      render={(routeParams) => (
         <>
           <Navbar isAuthenticated={isAuthenticated} />
-          <Component {...routeParams} />
+          <Component {...routeParams} userEmail={userEmail}/>
         </>
       )}
     />
@@ -48,16 +48,16 @@ const PrivateRoute = ({ path, isAuthenticated, component: Component }) => {
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const [userEmail, setUserEmail] = useState("");
   useEffect(() => {
     if (loading) {
       (async () => {
         try {
           const response = await axios.get(
-            'http://localhost:8000/api/v1/users/isAuthenticated',
+            "http://localhost:8000/api/v1/users/isAuthenticated",
             {
               headers: {
-                authorization: `Bearer ${localStorage.getItem('authToken')}`,
+                authorization: `Bearer ${localStorage.getItem("authToken")}`,
               },
             }
           );
@@ -75,29 +75,37 @@ const App = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-  console.log(localStorage.getItem('authToken'));
+  console.log(localStorage.getItem("authToken"));
 
   return (
     <BrowserRouter>
       <Switch>
         <PrivateRoute
-          path='/dashboard'
+          path="/dashboard"
           isAuthenticated={isAuthenticated}
           component={Dashboard}
+          userEmail={userEmail}
+        />
+        <PrivateRoute
+          path="/addProduct"
+          isAuthenticated={isAuthenticated}
+          component={AddProduct}
+          userEmail={userEmail}
         />
         <PublicRoute
-          path='/signin'
+          path="/signin"
           isAuthenticated={isAuthenticated}
           component={Signin}
           setIsAuthenticated={setIsAuthenticated}
+          setUserEmail={setUserEmail}
         />
         <PublicRoute
-          path='/signup'
+          path="/signup"
           isAuthenticated={isAuthenticated}
           component={Signup}
         />
         <PublicRoute
-          path='/'
+          path="/"
           isAuthenticated={isAuthenticated}
           component={Home}
           exact
