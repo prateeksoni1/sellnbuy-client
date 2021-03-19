@@ -7,12 +7,24 @@ import Navbar from './Navbar';
 import Signin from './Signin';
 import Signup from './Signup';
 
-const PublicRoute = ({ path, isAuthenticated, component: Component }) => {
+const PublicRoute = ({
+  path,
+  isAuthenticated,
+  component: Component,
+  setIsAuthenticated,
+}) => {
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
   }
 
-  return <Route path={path} component={Component} />;
+  return (
+    <Route
+      path={path}
+      render={routeParams => (
+        <Component {...routeParams} setIsAuthenticated={setIsAuthenticated} />
+      )}
+    />
+  );
 };
 
 const PrivateRoute = ({ path, isAuthenticated, component: Component }) => {
@@ -38,29 +50,32 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await axios.get(
-          'http://localhost:8000/api/v1/users/isAuthenticated',
-          {
-            headers: {
-              authorization: `Bearer ${localStorage.getItem('authToken')}`,
-            },
+    if (loading) {
+      (async () => {
+        try {
+          const response = await axios.get(
+            'http://localhost:8000/api/v1/users/isAuthenticated',
+            {
+              headers: {
+                authorization: `Bearer ${localStorage.getItem('authToken')}`,
+              },
+            }
+          );
+          if (response.data.ok) {
+            setIsAuthenticated(true);
+            setLoading(false);
           }
-        );
-        if (response.data.ok) {
-          setIsAuthenticated(true);
+        } catch (err) {
           setLoading(false);
         }
-      } catch (err) {
-        setLoading(false);
-      }
-    })();
-  });
+      })();
+    }
+  }, [loading]);
 
   if (loading) {
     return <div>Loading...</div>;
   }
+  console.log(localStorage.getItem('authToken'));
 
   return (
     <BrowserRouter>
@@ -74,6 +89,7 @@ const App = () => {
           path='/signin'
           isAuthenticated={isAuthenticated}
           component={Signin}
+          setIsAuthenticated={setIsAuthenticated}
         />
         <PublicRoute
           path='/signup'

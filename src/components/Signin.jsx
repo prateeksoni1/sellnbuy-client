@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 
-const Signin = ({ history }) => {
+const Signin = ({ history, setIsAuthenticated }) => {
   const { register, handleSubmit, errors } = useForm();
   const [error, setError] = useState();
   const onSubmit = async values => {
@@ -14,8 +14,11 @@ const Signin = ({ history }) => {
         values
       );
 
+      console.log(res.data);
+
       if (res.data.ok && res.data.token) {
         localStorage.setItem('authToken', res.data.token);
+        setIsAuthenticated(true);
         history.push('/dashboard');
       }
     } catch (err) {
