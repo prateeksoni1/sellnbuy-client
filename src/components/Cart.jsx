@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const Cart = () => {
+const Cart = ({ history }) => {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState();
 
@@ -17,7 +18,7 @@ const Cart = () => {
           }
         );
 
-        setOrders(response.data.products);
+        setOrders(response.data.orders);
       } catch (err) {
         if (!err.response) {
           setError('Internal Server Error');
@@ -25,18 +26,36 @@ const Cart = () => {
       }
     })();
   }, []);
-  const addToCart = async productId => {
+
+  const removeFromCart = async orderId => {
+    try {
+      await axios.delete(`http://localhost:8000/api/v1/orders/${orderId}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      });
+      setOrders(orders.filter(order => order.id !== orderId));
+      toast.success('Order removed successfully');
+    } catch (err) {
+      if (!err.response) {
+        setError('Internal Server Error');
+      } else setError(err.response.data.message);
+    }
+  };
+
+  const handleCheckout = async () => {
     try {
       await axios.post(
-        'http://localhost:8000/api/v1/orders',
-        { productId },
+        'http://localhost:8000/api/v1/orderhistory',
+        { orders: orders.map(order => order.id) },
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem('authToken')}`,
           },
         }
       );
-      alert('Added successfully');
+      toast.success('Products ordered successfully');
+      history.push('/dashboard');
     } catch (err) {
       if (!err.response) {
         setError('Internal Server Error');
@@ -47,25 +66,44 @@ const Cart = () => {
     <>
       <div className='mt-4 container'>
         {error && <div className='alert alert-danger'>{error}</div>}
-        {orders.map(order => {
-          const { id, name, price, User: user, image } = order.Product;
-          return (
-            <div key={id} className='card' style={{ width: '30rem' }}>
-              <div className='card-header'>{user.name}</div>
-              <img className='card-img-top' src={image} alt='Card cap' />
-              <div className='card-body'>
-                <h5 className='card-title'>{name}</h5>
-                <h6 className='card-subtitle'>{price}</h6>
-                <button
-                  className='btn btn-primary w-100'
-                //   onClick={() => addToCart(order.id)}
-                >
-                  ADD TO CART
-                </button>
+        <div className='row gx-2'>
+          {orders.map(order => {
+            const { id, name, price } = order.Product;
+            return (
+              <div key={id} className='col-6 card mt-2'>
+                <div className='card-body  d-flex flex-row align-items-center'>
+                  <h5 className='card-title'>{name}</h5>
+                  <h6 className='ms-4 card-subtitle'>{price}</h6>
+                  <button
+                    className='ms-auto btn btn-danger'
+                    onClick={() => removeFromCart(order.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        <div className='card mt-2'>
+          <div className='card-body d-flex flex-row align-items-center'>
+            <h5 className='card-title'>
+              Total Items: {orders.reduce((count, _) => count + 1, 0)}
+            </h5>
+            <h5 className='ms-4 card-title'>
+              Total Price:{' '}
+              {orders.reduce((sum, order) => sum + order.Product.price, 0)}
+            </h5>
+            {orders.length > 0 && (
+              <button
+                className='ms-auto btn btn-success'
+                onClick={handleCheckout}
+              >
+                Checkout
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </>
   );

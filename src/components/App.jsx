@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import Cart from './Cart';
 import Dashboard from './Dashboard';
@@ -82,42 +83,45 @@ const App = () => {
   console.log(localStorage.getItem('authToken'));
 
   return (
-    <BrowserRouter>
-      <Switch>
-        <PrivateRoute
-          path='/dashboard'
-          isAuthenticated={isAuthenticated}
-          component={Dashboard}
-        />
-        <PrivateRoute
-          path='/cart'
-          isAuthenticated={isAuthenticated}
-          component={Cart}
+    <>
+      <BrowserRouter>
+        <Switch>
+          <PrivateRoute
+            path='/dashboard'
+            isAuthenticated={isAuthenticated}
+            component={Dashboard}
           />
           <PrivateRoute
-          path='/addProduct'
-          isAuthenticated={isAuthenticated}
-          component={AddProduct}
+            path='/cart'
+            isAuthenticated={isAuthenticated}
+            component={Cart}
           />
-        <PublicRoute
-          path='/signin'
-          isAuthenticated={isAuthenticated}
-          component={Signin}
-          setIsAuthenticated={setIsAuthenticated}
-        />
-        <PublicRoute
-          path='/signup'
-          isAuthenticated={isAuthenticated}
-          component={Signup}
-        />
-        <PublicRoute
-          path='/'
-          isAuthenticated={isAuthenticated}
-          component={Home}
-          exact
-        />
-      </Switch>
-    </BrowserRouter>
+          <PrivateRoute
+            path='/addProduct'
+            isAuthenticated={isAuthenticated}
+            component={AddProduct}
+          />
+          <PublicRoute
+            path='/signin'
+            isAuthenticated={isAuthenticated}
+            component={Signin}
+            setIsAuthenticated={setIsAuthenticated}
+          />
+          <PublicRoute
+            path='/signup'
+            isAuthenticated={isAuthenticated}
+            component={Signup}
+          />
+          <PublicRoute
+            path='/'
+            isAuthenticated={isAuthenticated}
+            component={Home}
+            exact
+          />
+        </Switch>
+      </BrowserRouter>
+      <ToastContainer />
+    </>
   );
 };
 

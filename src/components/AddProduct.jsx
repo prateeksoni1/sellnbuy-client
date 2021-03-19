@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { toast } from 'react-toastify';
 
-const AddProduct = ({ history, userEmail }) => {
+const AddProduct = ({ history }) => {
   const { register, handleSubmit, errors } = useForm();
-  const [error, setError] = useState();
 
   const onAdd = async values => {
     try {
@@ -18,13 +17,13 @@ const AddProduct = ({ history, userEmail }) => {
         }
       );
       if (res.data.ok) {
-        alert('PRODUCT CREATED');
+        toast.success('Product added successfully');
         history.push('/dashboard');
       }
     } catch (err) {
       if (!err.response) {
-        setError('Internal Server Error');
-      } else setError(err.response.data.message);
+        toast.error('Internal Server Error');
+      } else toast.error(err.response.data.message);
     }
   };
 
@@ -32,11 +31,6 @@ const AddProduct = ({ history, userEmail }) => {
     <>
       <div className='mt-5 container' style={{ maxWidth: '30vw' }}>
         <h3 className='display-5 mb-4'>Add your Product</h3>
-        {error && (
-          <div className='alert alert-danger' role='alert'>
-            {error}
-          </div>
-        )}
         <form onSubmit={handleSubmit(onAdd)}>
           <div className='mb-3'>
             <label htmlFor='name' className='form-label'>
