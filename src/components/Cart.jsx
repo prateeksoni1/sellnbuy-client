@@ -45,7 +45,7 @@ const Cart = ({ history }) => {
 
   const handleCheckout = async () => {
     try {
-      await axios.post(
+      const response = await axios.post(
         'http://localhost:8000/api/v1/orderhistory',
         { orders: orders.map(order => order.id) },
         {
@@ -54,6 +54,7 @@ const Cart = ({ history }) => {
           },
         }
       );
+      console.log(response);
       toast.success('Products ordered successfully');
       history.push('/dashboard');
     } catch (err) {

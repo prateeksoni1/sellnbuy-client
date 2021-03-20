@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const OrderHistory = () => {
-  const [orderHistory, setOrderHistory] = useState([]);
+  const [orderHistories, setOrderHistory] = useState([]);
   const [error, setError] = useState();
 
   useEffect(() => {
@@ -16,8 +16,8 @@ const OrderHistory = () => {
             },
           }
         );
-          console.log(response);
-        setOrderHistory(response.data.orderHistory);
+        console.log(response);
+        setOrderHistory(response.data.orderHistories);
       } catch (err) {
         if (!err.response) {
           setError('Internal Server Error');
@@ -25,29 +25,11 @@ const OrderHistory = () => {
       }
     })();
   }, []);
-//   const addToCart = async productId => {
-//     try {
-//       await axios.post(
-//         'http://localhost:8000/api/v1/orders',
-//         { productId },
-//         {
-//           headers: {
-//             authorization: `Bearer ${localStorage.getItem('authToken')}`,
-//           },
-//         }
-//       );
-//       alert('Added successfully');
-//     } catch (err) {
-//       if (!err.response) {
-//         setError('Internal Server Error');
-//       } else setError(err.response.data.message);
-//     }
-//   };
   return (
     <>
       <div className='mt-4 container'>
         {error && <div className='alert alert-danger'>{error}</div>}
-        {orderHistory.map(orderHistory => {
+        {orderHistories.map(orderHistory => {
           const { id, name, price, User: user, image } = orderHistory.Order.Product;
           return (
             <div key={id} className='card' style={{ width: '30rem' }}>
@@ -56,12 +38,6 @@ const OrderHistory = () => {
               <div className='card-body'>
                 <h5 className='card-title'>{name}</h5>
                 <h6 className='card-subtitle'>{price}</h6>
-                <button
-                  className='btn btn-primary w-100'
-                //   onClick={() => addToCart(order.id)}
-                >
-                  ADD TO CART
-                </button>
               </div>
             </div>
           );
