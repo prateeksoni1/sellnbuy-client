@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Card from './Card';
+import { toast } from 'react-toastify';
+
+import ProductCard from './ProductCard';
 
 const Dashboard = () => {
   const [products, setProducts] = useState([]);
-  const [error, setError] = useState();
 
   useEffect(() => {
     (async () => {
@@ -22,8 +24,8 @@ const Dashboard = () => {
         setProducts(response.data.products);
       } catch (err) {
         if (!err.response) {
-          setError('Internal Server Error');
-        } else setError(err.response.data.message);
+          toast.error('Internal Server Error');
+        } else toast.error(err.response.data.message);
       }
     })();
   }, []);
@@ -38,22 +40,23 @@ const Dashboard = () => {
           },
         }
       );
-      alert('Added successfully');
+      toast.success('Added to cart successfully');
     } catch (err) {
       if (!err.response) {
-        setError('Internal Server Error');
-      } else setError(err.response.data.message);
+        toast.error('Internal Server Error');
+      } else toast.error(err.response.data.message);
     }
   };
   return (
     <div style={{ minHeight: '95vh', backgroundColor: '#F0F1F5' }}>
       <div className='pt-4 container'>
-        {error && <div className='alert alert-danger'>{error}</div>}
         <h2 className='display-5'>Category A</h2>
         <div className='row'>
           {products.map(product => (
             <div className='col-md-3'>
-              <Card product={product} addToCart={addToCart} />
+              <Card key={product.id}>
+                <ProductCard product={product} addToCart={addToCart} />
+              </Card>
             </div>
           ))}
         </div>
