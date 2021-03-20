@@ -10,6 +10,7 @@ import Signin from './Signin';
 import Signup from './Signup';
 import AddProduct from './AddProduct';
 import OrderHistory from './OrderHistory';
+import AdminPage from './Admin';
 const PublicRoute = ({
   path,
   isAuthenticated,
@@ -34,6 +35,7 @@ const PrivateRoute = ({
   path,
   isAuthenticated,
   component: Component,
+  setIsAuthenticated,
   userEmail,
 }) => {
   if (!isAuthenticated) {
@@ -44,8 +46,38 @@ const PrivateRoute = ({
       path={path}
       render={routeParams => (
         <>
-          <Navbar isAuthenticated={isAuthenticated} />
+          <Navbar
+            isAuthenticated={isAuthenticated}
+            setIsAuthenticated={setIsAuthenticated}
+          />
           <Component {...routeParams} userEmail={userEmail} />
+        </>
+      )}
+    />
+  );
+};
+
+const AdminRoute = ({
+  path,
+  component: Component,
+  isAuthenticated,
+  isSuperAdmin,
+  setIsAuthenticated,
+}) => {
+  if (!isAuthenticated || !isSuperAdmin) {
+    return <Redirect to='/signin' />;
+  }
+
+  return (
+    <Route
+      path={path}
+      render={routeParams => (
+        <>
+          <Navbar
+            isAuthenticated={isAuthenticated}
+            setIsAuthenticated={setIsAuthenticated}
+          />
+          <Component {...routeParams} />
         </>
       )}
     />
@@ -54,6 +86,7 @@ const PrivateRoute = ({
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (loading) {
@@ -69,6 +102,11 @@ const App = () => {
           );
           if (response.data.ok) {
             setIsAuthenticated(true);
+
+            if (response.data.superAdmin) {
+              setIsSuperAdmin(true);
+            }
+
             setLoading(false);
           }
         } catch (err) {
@@ -81,33 +119,43 @@ const App = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-  console.log(localStorage.getItem('authToken'));
 
   return (
     <>
       <BrowserRouter>
         <Switch>
+          <AdminRoute
+            path='/admin'
+            component={AdminPage}
+            isSuperAdmin={isSuperAdmin}
+            isAuthenticated={isAuthenticated}
+            setIsAuthenticated={setIsAuthenticated}
+          />
           <PrivateRoute
             path='/dashboard'
             isAuthenticated={isAuthenticated}
+            setIsAuthenticated={setIsAuthenticated}
             component={Dashboard}
           />
           <PrivateRoute
             path='/cart'
             isAuthenticated={isAuthenticated}
+            setIsAuthenticated={setIsAuthenticated}
             component={Cart}
           />
           <PrivateRoute
             path='/orderHistory'
             isAuthenticated={isAuthenticated}
+            setIsAuthenticated={setIsAuthenticated}
             component={OrderHistory}
           />
           <PrivateRoute
             path='/addProduct'
             isAuthenticated={isAuthenticated}
+            setIsAuthenticated={setIsAuthenticated}
             component={AddProduct}
           />
-          
+
           <PublicRoute
             path='/signin'
             isAuthenticated={isAuthenticated}

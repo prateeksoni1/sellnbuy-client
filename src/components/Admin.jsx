@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 import AdminCard from './AdminCard';
 
-const Dashboard = () => {
+const AdminPage = () => {
   const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
@@ -39,7 +39,13 @@ const Dashboard = () => {
           },
         }
       );
-      toast.success('Added to cart successfully');
+
+      toast.success('Admin approved successfully');
+      setAdmins(admins =>
+        admins.map(admin =>
+          admin.id === userId ? { ...admin, approved: true } : admin
+        )
+      );
     } catch (err) {
       if (!err.response) {
         toast.error('Internal Server Error');
@@ -55,7 +61,9 @@ const Dashboard = () => {
           )}
           {admins.map(admin => (
             <div key={admin.id} className='col-md-3'>
-              <Card>
+              <Card
+                style={{ backgroundColor: admin.approved ? '#d8f3dc' : '#fff' }}
+              >
                 <AdminCard admin={admin} approve={approve} />
               </Card>
             </div>
@@ -66,4 +74,4 @@ const Dashboard = () => {
   );
 };
 
-export default Admin;
+export default AdminPage;
