@@ -72,26 +72,6 @@ const AddProduct = ({ history }) => {
                 <p className='text-danger'>{errors.price && 'Minimum $1'}</p>
               </div>
               <div className='mb-3'>
-                <label htmlFor='category' className='form-label'>
-                  Category
-                </label>
-                <select
-                  className='form-select'
-                  name='category'
-                  id='category'
-                  ref={register({
-                    required: true,
-                  })}
-                >
-                  <option selected>Choose your product's category</option>
-                  <option value='a'>a</option>
-                  <option value='b'>b</option>
-                </select>
-                <p className='text-danger'>
-                  {errors.category && 'Categories are required.'}
-                </p>
-              </div>
-              <div className='mb-3'>
                 <label htmlFor='image' className='form-label'>
                   Image
                 </label>

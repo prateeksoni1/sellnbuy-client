@@ -11,7 +11,6 @@ const Dashboard = () => {
   useEffect(() => {
     (async () => {
       try {
-        //   console.log(req,res)
         const response = await axios.get(
           'http://localhost:8000/api/v1/products',
           {
@@ -50,11 +49,13 @@ const Dashboard = () => {
   return (
     <div style={{ minHeight: '95vh', backgroundColor: '#F0F1F5' }}>
       <div className='pt-4 container'>
-        <h2 className='display-5'>Category A</h2>
         <div className='row'>
+          {products.length === 0 && (
+            <h4 className='display-5 text-center'>No products found</h4>
+          )}
           {products.map(product => (
-            <div className='col-md-3'>
-              <Card key={product.id}>
+            <div key={product.id} className='col-md-3'>
+              <Card>
                 <ProductCard product={product} addToCart={addToCart} />
               </Card>
             </div>

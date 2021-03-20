@@ -1,13 +1,19 @@
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import Navbar from './Navbar';
 
 const Signup = ({ history }) => {
   const { register, handleSubmit, errors } = useForm();
 
   const onSubmit = async values => {
-    await axios.post('http://localhost:8000/api/v1/users', values);
-    history.push('/signin');
+    try {
+      await axios.post('http://localhost:8000/api/v1/users', values);
+      history.push('/signin');
+    } catch (err) {
+      if (!err.response) toast.error('Internal Server Error');
+      else toast.error(err.response.data.message);
+    }
   };
 
   return (
