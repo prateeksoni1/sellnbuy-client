@@ -9,15 +9,15 @@ const OrderHistory = () => {
     (async () => {
       try {
         const response = await axios.get(
-          'http://localhost:8000/api/v1/orders/orderHistory',
+          'http://localhost:8000/api/v1/orderHistory/user',
           {
             headers: {
               authorization: `Bearer ${localStorage.getItem('authToken')}`,
             },
           }
         );
-
-        setOrderHistory(response.data.products);
+          console.log(response);
+        setOrderHistory(response.data.orderHistory);
       } catch (err) {
         if (!err.response) {
           setError('Internal Server Error');
@@ -25,30 +25,30 @@ const OrderHistory = () => {
       }
     })();
   }, []);
-  const addToCart = async productId => {
-    try {
-      await axios.post(
-        'http://localhost:8000/api/v1/orders',
-        { productId },
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem('authToken')}`,
-          },
-        }
-      );
-      alert('Added successfully');
-    } catch (err) {
-      if (!err.response) {
-        setError('Internal Server Error');
-      } else setError(err.response.data.message);
-    }
-  };
+//   const addToCart = async productId => {
+//     try {
+//       await axios.post(
+//         'http://localhost:8000/api/v1/orders',
+//         { productId },
+//         {
+//           headers: {
+//             authorization: `Bearer ${localStorage.getItem('authToken')}`,
+//           },
+//         }
+//       );
+//       alert('Added successfully');
+//     } catch (err) {
+//       if (!err.response) {
+//         setError('Internal Server Error');
+//       } else setError(err.response.data.message);
+//     }
+//   };
   return (
     <>
       <div className='mt-4 container'>
         {error && <div className='alert alert-danger'>{error}</div>}
-        {orderHistory.map(order => {
-          const { id, name, price, User: user, image } = order.Product;
+        {orderHistory.map(orderHistory => {
+          const { id, name, price, User: user, image } = orderHistory.Order.Product;
           return (
             <div key={id} className='card' style={{ width: '30rem' }}>
               <div className='card-header'>{user.name}</div>

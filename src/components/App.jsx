@@ -9,6 +9,7 @@ import Navbar from './Navbar';
 import Signin from './Signin';
 import Signup from './Signup';
 import AddProduct from './AddProduct';
+import OrderHistory from './OrderHistory';
 const PublicRoute = ({
   path,
   isAuthenticated,
@@ -97,10 +98,16 @@ const App = () => {
             component={Cart}
           />
           <PrivateRoute
+            path='/orderHistory'
+            isAuthenticated={isAuthenticated}
+            component={OrderHistory}
+          />
+          <PrivateRoute
             path='/addProduct'
             isAuthenticated={isAuthenticated}
             component={AddProduct}
           />
+          
           <PublicRoute
             path='/signin'
             isAuthenticated={isAuthenticated}
