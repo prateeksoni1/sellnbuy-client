@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Card from './Card';
 
 const Dashboard = () => {
   const [products, setProducts] = useState([]);
@@ -45,30 +46,19 @@ const Dashboard = () => {
     }
   };
   return (
-    <>
-      <div className='mt-4 container'>
+    <div style={{ minHeight: '95vh', backgroundColor: '#F0F1F5' }}>
+      <div className='pt-4 container'>
         {error && <div className='alert alert-danger'>{error}</div>}
-        {products.map(product => {
-          const { id, name, price, User: user, image } = product;
-          return (
-            <div key={id} className='card' style={{ width: '30rem' }}>
-              <div className='card-header'>{user.name}</div>
-              <img className='card-img-top' src={image} alt='Card cap' />
-              <div className='card-body'>
-                <h5 className='card-title'>{name}</h5>
-                <h6 className='card-subtitle'>{price}</h6>
-                <button
-                  className='btn btn-primary w-100'
-                  onClick={() => addToCart(product.id)}
-                >
-                  ADD TO CART
-                </button>
-              </div>
+        <h2 className='display-5'>Category A</h2>
+        <div className='row'>
+          {products.map(product => (
+            <div className='col-md-3'>
+              <Card product={product} addToCart={addToCart} />
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
