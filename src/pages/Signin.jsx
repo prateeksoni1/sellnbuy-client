@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Navbar from './Navbar';
+import Navbar from '../app/components/Navbar';
 import { Link } from 'react-router-dom';
 
 const Signin = ({ history, setIsAuthenticated }) => {

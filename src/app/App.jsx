@@ -1,92 +1,23 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import Cart from './Cart';
-import Dashboard from './Dashboard';
-import Home from './Home';
-import Navbar from './Navbar';
-import Signin from './Signin';
-import Signup from './Signup';
-import AddProduct from './AddProduct';
-import OrderHistory from './OrderHistory';
-import AdminPage from './Admin';
-const PublicRoute = ({
-  path,
-  isAuthenticated,
-  component: Component,
-  setIsAuthenticated,
-}) => {
-  if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
-  }
-
-  return (
-    <Route
-      path={path}
-      render={routeParams => (
-        <Component {...routeParams} setIsAuthenticated={setIsAuthenticated} />
-      )}
-    />
-  );
-};
-
-const PrivateRoute = ({
-  path,
-  isAuthenticated,
-  component: Component,
-  setIsAuthenticated,
-  userEmail,
-}) => {
-  if (!isAuthenticated) {
-    return <Redirect to='/signin' />;
-  }
-  return (
-    <Route
-      path={path}
-      render={routeParams => (
-        <>
-          <Navbar
-            isAuthenticated={isAuthenticated}
-            setIsAuthenticated={setIsAuthenticated}
-          />
-          <Component {...routeParams} userEmail={userEmail} />
-        </>
-      )}
-    />
-  );
-};
-
-const AdminRoute = ({
-  path,
-  component: Component,
-  isAuthenticated,
-  isSuperAdmin,
-  setIsAuthenticated,
-}) => {
-  if (!isAuthenticated || !isSuperAdmin) {
-    return <Redirect to='/signin' />;
-  }
-
-  return (
-    <Route
-      path={path}
-      render={routeParams => (
-        <>
-          <Navbar
-            isAuthenticated={isAuthenticated}
-            setIsAuthenticated={setIsAuthenticated}
-          />
-          <Component {...routeParams} />
-        </>
-      )}
-    />
-  );
-};
+import { BrowserRouter, Switch } from 'react-router-dom';
+import Cart from '../pages/Cart';
+import Dashboard from '../pages/dashboard/Dashboard';
+import Home from '../pages/Home';
+import Signin from '../pages/Signin';
+import Signup from '../pages/Signup';
+import AddProduct from '../pages/AddProduct';
+import OrderHistory from '../pages/OrderHistory';
+import AdminPage from '../pages/admin/Admin';
+import AdminRoute from './components/AdminRoute';
+import PrivateRoute from './components/PrivateRoute';
+import PublicRoute from './components/PublicRoute';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [role, setRole] = useState('user');
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (loading) {
@@ -106,6 +37,8 @@ const App = () => {
             if (response.data.superAdmin) {
               setIsSuperAdmin(true);
             }
+
+            setRole(response.data.role);
 
             setLoading(false);
           }
@@ -130,30 +63,40 @@ const App = () => {
             isSuperAdmin={isSuperAdmin}
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
+            role={role}
+            allowedRole={['superAdmin']}
           />
           <PrivateRoute
             path='/dashboard'
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
+            role={role}
             component={Dashboard}
+            allowedRole={['admin', 'user', 'superAdmin']}
           />
           <PrivateRoute
             path='/cart'
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
+            role={role}
             component={Cart}
+            allowedRole={['user']}
           />
           <PrivateRoute
             path='/orderHistory'
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
+            role={role}
             component={OrderHistory}
+            allowedRole={['user']}
           />
           <PrivateRoute
             path='/addProduct'
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
+            role={role}
             component={AddProduct}
+            allowedRole={['admin', 'user']}
           />
 
           <PublicRoute

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Card from './Card';
 import { toast } from 'react-toastify';
+import Card from '../components/hoc/Card';
 
-const OrderHistory = () => {
+const Cart = ({ history }) => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -13,14 +13,14 @@ const OrderHistory = () => {
           'http://localhost:8000/api/v1/orders/cart',
           {
             params: {
-              isPurchased: 1,
+              isPurchased: 0,
             },
             headers: {
               authorization: `Bearer ${localStorage.getItem('authToken')}`,
             },
           }
         );
-        console.log(response);
+
         setOrders(
           response.data.orders.reduce((orders, order) => {
             const index = orders.findIndex(
@@ -52,6 +52,63 @@ const OrderHistory = () => {
     })();
   }, []);
 
+  const removeFromCart = async orderId => {
+    try {
+      await axios.delete(`http://localhost:8000/api/v1/orders/${orderId}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      });
+
+      const newOrders = [...orders];
+
+      const index = newOrders.findIndex(
+        orderItem => orderItem.ids[0] === orderId
+      );
+      newOrders[index].quantity--;
+      newOrders[index].totalPrice -= newOrders[index].Product.price;
+      newOrders[index].ids.splice(0, 1);
+
+      if (newOrders[index].quantity === 0) {
+        newOrders.splice(index, 1);
+      }
+
+      setOrders(newOrders);
+
+      toast.success('Order removed successfully');
+    } catch (err) {
+      console.log(err);
+
+      if (!err.response) {
+        toast.error('Internal Server Error');
+      } else toast.error(err.response.data.message);
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      await axios.post(
+        'http://localhost:8000/api/v1/orderhistory',
+        {
+          orders: orders.reduce((orders, order) => {
+            order.ids.forEach(item => orders.push(item));
+            return orders;
+          }, []),
+        },
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('authToken')}`,
+          },
+        }
+      );
+      toast.success('Products ordered successfully');
+      history.push('/dashboard');
+    } catch (err) {
+      if (!err.response) {
+        toast.error('Internal Server Error');
+      } else toast.error(err.response.data.message);
+    }
+  };
   return (
     <>
       <div className='mt-4 container'>
@@ -91,6 +148,11 @@ const OrderHistory = () => {
                       >
                         &#x20B9;{totalPrice}
                       </h5>
+                      <img
+                        src='/assets/trash.svg'
+                        onClick={() => removeFromCart(order.ids[0])}
+                        alt='delete'
+                      />
                     </div>
                   </div>
                 </Card>
@@ -111,6 +173,14 @@ const OrderHistory = () => {
                 0
               )}
             </h5>
+            {orders.length > 0 && (
+              <button
+                className='ms-auto btn btn-success'
+                onClick={handleCheckout}
+              >
+                Checkout
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -118,4 +188,4 @@ const OrderHistory = () => {
   );
 };
 
-export default OrderHistory;
+export default Cart;

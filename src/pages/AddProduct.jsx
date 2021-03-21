@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import Card from './Card';
+import Card from '../components/hoc/Card';
 
 const AddProduct = ({ history }) => {
   const { register, handleSubmit, errors } = useForm();

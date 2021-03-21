@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Card from './Card';
+import Card from '../../components/hoc/Card';
 import { toast } from 'react-toastify';
 
-import AdminCard from './AdminCard';
+import ProductCard from './components/ProductCard';
 
-const AdminPage = () => {
-  const [admins, setAdmins] = useState([]);
+const Dashboard = () => {
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
         const response = await axios.get(
-          'http://localhost:8000/api/v1/superadmin',
+          'http://localhost:8000/api/v1/products',
           {
             headers: {
               authorization: `Bearer ${localStorage.getItem('authToken')}`,
@@ -20,7 +20,7 @@ const AdminPage = () => {
           }
         );
 
-        setAdmins(response.data.users);
+        setProducts(response.data.products);
       } catch (err) {
         if (!err.response) {
           toast.error('Internal Server Error');
@@ -28,24 +28,18 @@ const AdminPage = () => {
       }
     })();
   }, []);
-  const approve = async userId => {
+  const addToCart = async productId => {
     try {
       await axios.post(
-        'http://localhost:8000/api/v1/superadmin/approve',
-        { userId },
+        'http://localhost:8000/api/v1/orders',
+        { productId },
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem('authToken')}`,
           },
         }
       );
-
-      toast.success('Admin approved successfully');
-      setAdmins(admins =>
-        admins.map(admin =>
-          admin.id === userId ? { ...admin, approved: true } : admin
-        )
-      );
+      toast.success('Added to cart successfully');
     } catch (err) {
       if (!err.response) {
         toast.error('Internal Server Error');
@@ -56,15 +50,13 @@ const AdminPage = () => {
     <div style={{ minHeight: '95vh', backgroundColor: '#F0F1F5' }}>
       <div className='pt-4 container'>
         <div className='row'>
-          {admins.length === 0 && (
-            <h4 className='display-5 text-center'>No Admin Requests</h4>
+          {products.length === 0 && (
+            <h4 className='display-5 text-center'>No products found</h4>
           )}
-          {admins.map(admin => (
-            <div key={admin.id} className='col-md-3'>
-              <Card
-                style={{ backgroundColor: admin.approved ? '#d8f3dc' : '#fff' }}
-              >
-                <AdminCard admin={admin} approve={approve} />
+          {products.map(product => (
+            <div key={product.id} className='col-md-3'>
+              <Card>
+                <ProductCard product={product} addToCart={addToCart} />
               </Card>
             </div>
           ))}
@@ -74,4 +66,4 @@ const AdminPage = () => {
   );
 };
 
-export default AdminPage;
+export default Dashboard;
