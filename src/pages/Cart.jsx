@@ -77,8 +77,6 @@ const Cart = ({ history }) => {
 
       toast.success('Order removed successfully');
     } catch (err) {
-      console.log(err);
-
       if (!err.response) {
         toast.error('Internal Server Error');
       } else toast.error(err.response.data.message);

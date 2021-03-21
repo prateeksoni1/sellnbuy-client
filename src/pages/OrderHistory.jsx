@@ -20,7 +20,7 @@ const OrderHistory = () => {
             },
           }
         );
-        console.log(response);
+
         setOrders(
           response.data.orders.reduce((orders, order) => {
             const index = orders.findIndex(

@@ -1,8 +1,7 @@
 import React from 'react';
 
 const AdminCard = ({ admin, approve }) => {
-  const { id, name, email, contact, approved } = admin;
-  console.log(approved);
+  const { id, name, email, contact } = admin;
   return (
     <div>
       <div className='pt-2'>

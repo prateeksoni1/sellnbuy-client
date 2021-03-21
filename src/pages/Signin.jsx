@@ -14,18 +14,14 @@ const Signin = ({ history, setIsAuthenticated }) => {
         values
       );
 
-      console.log('RES DATA ', res.data);
-
       if (res.data.ok && res.data.token) {
         localStorage.setItem('authToken', res.data.token);
-        console.log(typeof res.data.superAdmin);
         setIsAuthenticated(true);
         if (res.data.superAdmin) {
           history.push('/admin');
         } else history.push('/dashboard');
       }
     } catch (err) {
-      console.log(err);
       if (!err.response) {
         setError('Internal Server Error');
       } else setError(err.response.data.message);
