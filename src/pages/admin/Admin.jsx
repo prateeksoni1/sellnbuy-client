@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Card from '../../components/hoc/Card';
 import { toast } from 'react-toastify';
 
 import AdminCard from './components/AdminCard';
+import { getAdminRequests } from '../../services';
+import { approveRequest } from '../../services/superAdminService';
 
 const AdminPage = () => {
   const [approvedAdmins, setApprovedAdmins] = useState([]);
@@ -12,14 +13,7 @@ const AdminPage = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/v1/superadmin',
-          {
-            headers: {
-              authorization: `Bearer ${localStorage.getItem('authToken')}`,
-            },
-          }
-        );
+        const response = await getAdminRequests();
 
         response.data.users.forEach(user => {
           if (user.approved) {
@@ -38,15 +32,7 @@ const AdminPage = () => {
 
   const approve = async userId => {
     try {
-      await axios.post(
-        'http://localhost:8000/api/v1/superadmin/approve',
-        { userId },
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem('authToken')}`,
-          },
-        }
-      );
+      await approveRequest();
 
       toast.success('Admin approved successfully');
 

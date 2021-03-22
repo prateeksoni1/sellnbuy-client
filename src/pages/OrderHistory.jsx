@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Card from '../components/hoc/Card';
 import { toast } from 'react-toastify';
+import { getOrderedProducts } from '../services';
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -9,17 +9,7 @@ const OrderHistory = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/v1/orders/cart',
-          {
-            params: {
-              isPurchased: 1,
-            },
-            headers: {
-              authorization: `Bearer ${localStorage.getItem('authToken')}`,
-            },
-          }
-        );
+        const response = await getOrderedProducts();
 
         setOrders(
           response.data.orders.reduce((orders, order) => {

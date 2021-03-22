@@ -6,6 +6,7 @@ const PublicRoute = ({
   component: Component,
   setIsAuthenticated,
   setRole,
+  setIsSuperAdmin,
 }) => {
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
@@ -19,6 +20,7 @@ const PublicRoute = ({
           {...routeParams}
           setIsAuthenticated={setIsAuthenticated}
           setRole={setRole}
+          setIsSuperAdmin={setIsSuperAdmin}
         />
       )}
     />

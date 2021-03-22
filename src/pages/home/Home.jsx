@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Navbar from '../app/components/Navbar';
+import Navbar from '../../app/components/Navbar';
 
 const Home = () => {
   return (
@@ -14,7 +14,9 @@ const Home = () => {
           backgroundSize: 'cover',
         }}
       >
-        <h2 className='display-4'>Welcome to OSBD</h2>
+        <h2 data-testid='message' className='display-4'>
+          Welcome to OSBD
+        </h2>
         <Link className='mt-4 btn btn-primary btn-lg' to='/signin'>
           Get Started Now
         </Link>

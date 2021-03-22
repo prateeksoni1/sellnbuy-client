@@ -1,24 +1,22 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Navbar from '../app/components/Navbar';
+import Navbar from '../../app/components/Navbar';
 import { Link } from 'react-router-dom';
+import { signinUser } from '../../services';
 
-const Signin = ({ history, setIsAuthenticated, setRole }) => {
+const Signin = ({ history, setIsAuthenticated, setRole, setIsSuperAdmin }) => {
   const { register, handleSubmit, errors } = useForm();
   const [error, setError] = useState();
   const onSubmit = async values => {
     try {
-      const res = await axios.post(
-        'http://localhost:8000/api/v1/users/login',
-        values
-      );
+      const res = await signinUser(values);
 
       if (res.data.ok && res.data.token) {
         localStorage.setItem('authToken', res.data.token);
         setIsAuthenticated(true);
         setRole(res.data.role);
         if (res.data.superAdmin) {
+          setIsSuperAdmin(true);
           history.push('/admin');
         } else history.push('/dashboard');
       }
@@ -39,7 +37,7 @@ const Signin = ({ history, setIsAuthenticated, setRole }) => {
             {error}
           </div>
         )}
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form data-testid='signin-form' onSubmit={handleSubmit(onSubmit)}>
           <div className='mb-3'>
             <label htmlFor='email' className='form-label'>
               Email Address
@@ -77,7 +75,11 @@ const Signin = ({ history, setIsAuthenticated, setRole }) => {
               {errors.password && 'Password cannot be empty'}
             </p>
           </div>
-          <button type='submit' className='mt-3 btn btn-primary w-100 btn-lg'>
+          <button
+            data-testid='submit-btn'
+            type='submit'
+            className='mt-3 btn btn-primary w-100 btn-lg'
+          >
             Sign In
           </button>
           <div className='mb-4'>

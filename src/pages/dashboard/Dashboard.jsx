@@ -4,6 +4,7 @@ import Card from '../../components/hoc/Card';
 import { toast } from 'react-toastify';
 
 import ProductCard from './components/ProductCard';
+import { getAllProducts } from '../../services';
 
 const Dashboard = () => {
   const [products, setProducts] = useState([]);
@@ -11,14 +12,7 @@ const Dashboard = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/v1/products',
-          {
-            headers: {
-              authorization: `Bearer ${localStorage.getItem('authToken')}`,
-            },
-          }
-        );
+        const response = await getAllProducts();
 
         setProducts(response.data.products);
       } catch (err) {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Card from '../components/hoc/Card';
+import { deleteFromCart, getCartItems } from '../services';
 
 const Cart = ({ history }) => {
   const [orders, setOrders] = useState([]);
@@ -9,17 +10,7 @@ const Cart = ({ history }) => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/v1/orders/cart',
-          {
-            params: {
-              isPurchased: 0,
-            },
-            headers: {
-              authorization: `Bearer ${localStorage.getItem('authToken')}`,
-            },
-          }
-        );
+        const response = await getCartItems();
 
         setOrders(
           response.data.orders.reduce((orders, order) => {
@@ -54,11 +45,7 @@ const Cart = ({ history }) => {
 
   const removeFromCart = async orderId => {
     try {
-      await axios.delete(`http://localhost:8000/api/v1/orders/${orderId}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
-      });
+      await deleteFromCart(orderId);
 
       const newOrders = [...orders];
 

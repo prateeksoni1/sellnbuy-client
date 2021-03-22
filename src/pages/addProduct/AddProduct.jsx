@@ -1,22 +1,14 @@
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import Card from '../components/hoc/Card';
+import Card from '../../components/hoc/Card';
+import { addProduct } from '../../services';
 
 const AddProduct = ({ history }) => {
   const { register, handleSubmit, errors } = useForm();
 
   const onAdd = async values => {
     try {
-      const res = await axios.post(
-        'http://localhost:8000/api/v1/products',
-        values,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem('authToken')}`,
-          },
-        }
-      );
+      const res = await addProduct(values);
       if (res.data.ok) {
         toast.success('Product added successfully');
         history.push('/dashboard');

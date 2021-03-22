@@ -1,18 +1,18 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { BrowserRouter, Switch } from 'react-router-dom';
 import Cart from '../pages/Cart';
 import Dashboard from '../pages/dashboard/Dashboard';
-import Home from '../pages/Home';
-import Signin from '../pages/Signin';
+import Home from '../pages/home/Home';
+import Signin from '../pages/signin/Signin';
 import Signup from '../pages/Signup';
-import AddProduct from '../pages/AddProduct';
+import AddProduct from '../pages/addProduct/AddProduct';
 import OrderHistory from '../pages/OrderHistory';
 import AdminPage from '../pages/admin/Admin';
 import AdminRoute from './components/AdminRoute';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
+import { getIsAuthenticated } from '../services';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState();
@@ -23,14 +23,7 @@ const App = () => {
     if (loading) {
       (async () => {
         try {
-          const response = await axios.get(
-            'http://localhost:8000/api/v1/users/isAuthenticated',
-            {
-              headers: {
-                authorization: `Bearer ${localStorage.getItem('authToken')}`,
-              },
-            }
-          );
+          const response = await getIsAuthenticated();
           if (response.data.ok) {
             setIsAuthenticated(true);
 
@@ -116,6 +109,7 @@ const App = () => {
             isAuthenticated={isAuthenticated}
             component={Signin}
             setIsAuthenticated={setIsAuthenticated}
+            setIsSuperAdmin={setIsSuperAdmin}
             setRole={setRole}
           />
           <PublicRoute
