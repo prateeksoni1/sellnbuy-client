@@ -32,7 +32,7 @@ const AdminPage = () => {
 
   const approve = async userId => {
     try {
-      await approveRequest();
+      await approveRequest(userId);
 
       toast.success('Admin approved successfully');
 

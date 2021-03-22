@@ -73,7 +73,7 @@ const Cart = ({ history }) => {
   const handleCheckout = async () => {
     try {
       await axios.post(
-        'http://localhost:8000/api/v1/orderhistory',
+        'http://localhost:8000/api/v1/orders/checkout',
         {
           orders: orders.reduce((orders, order) => {
             order.ids.forEach(item => orders.push(item));
