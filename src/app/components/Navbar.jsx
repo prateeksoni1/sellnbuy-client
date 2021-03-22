@@ -46,12 +46,6 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated, isSuperAdmin }) => {
                   </Link>
                 </li>
               </>
-            ) : isAuthenticated ? (
-              <li className='nav-item'>
-                <button className='btn text-white' onClick={handleLogout}>
-                  Log out
-                </button>
-              </li>
             ) : (
               <>
                 <li className='nav-item'>
@@ -65,6 +59,13 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated, isSuperAdmin }) => {
                   </Link>
                 </li>
               </>
+            )}
+            {isAuthenticated && (
+              <li className='nav-item'>
+                <button className='btn text-white' onClick={handleLogout}>
+                  Log out
+                </button>
+              </li>
             )}
           </ul>
         </div>

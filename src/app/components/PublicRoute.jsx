@@ -5,6 +5,7 @@ const PublicRoute = ({
   isAuthenticated,
   component: Component,
   setIsAuthenticated,
+  setRole,
 }) => {
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
@@ -14,7 +15,11 @@ const PublicRoute = ({
     <Route
       path={path}
       render={routeParams => (
-        <Component {...routeParams} setIsAuthenticated={setIsAuthenticated} />
+        <Component
+          {...routeParams}
+          setIsAuthenticated={setIsAuthenticated}
+          setRole={setRole}
+        />
       )}
     />
   );

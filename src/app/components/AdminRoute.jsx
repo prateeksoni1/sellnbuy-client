@@ -15,7 +15,7 @@ const AdminRoute = ({
     return <Redirect to='/signin' />;
   }
 
-  if (!allowedRole.find(item => item === role)) {
+  if (role && !allowedRole.find(item => item === role)) {
     toast.error("You're not allowed to access this route");
 
     return <Redirect to='/dashboard' />;

@@ -62,8 +62,6 @@ const AdminPage = () => {
     }
   };
 
-  console.log({ approvedAdmins, pendingAdmins });
-
   return (
     <div style={{ minHeight: '95vh', backgroundColor: '#F0F1F5' }}>
       <div className='pt-4 container'>

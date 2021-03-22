@@ -15,9 +15,9 @@ import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
-  const [role, setRole] = useState('user');
+  const [isAuthenticated, setIsAuthenticated] = useState();
+  const [isSuperAdmin, setIsSuperAdmin] = useState();
+  const [role, setRole] = useState();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (loading) {
@@ -39,15 +39,27 @@ const App = () => {
             }
 
             setRole(response.data.role);
-
-            setLoading(false);
+          } else {
+            setIsAuthenticated(false);
+            setIsSuperAdmin(false);
+            setRole(null);
           }
         } catch (err) {
-          setLoading(false);
+          setIsAuthenticated(false);
+          setIsSuperAdmin(false);
+          setRole(null);
         }
       })();
     }
   }, [loading]);
+
+  useEffect(() => {
+    if (loading) {
+      if (isAuthenticated !== undefined && isAuthenticated !== null) {
+        setLoading(false);
+      }
+    }
+  }, [loading, isAuthenticated]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -104,6 +116,7 @@ const App = () => {
             isAuthenticated={isAuthenticated}
             component={Signin}
             setIsAuthenticated={setIsAuthenticated}
+            setRole={setRole}
           />
           <PublicRoute
             path='/signup'
