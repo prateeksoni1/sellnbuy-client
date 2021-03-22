@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
+const Navbar = ({ isAuthenticated, setIsAuthenticated, isSuperAdmin }) => {
   const handleLogout = () => {
     localStorage.setItem('authToken', null);
     setIsAuthenticated(false);
@@ -28,7 +28,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
         </button>
         <div className='collapse navbar-collapse' id='navbarText'>
           <ul className='ms-auto navbar-nav mb-2 mb-lg-0'>
-            {isAuthenticated ? (
+            {isAuthenticated && !isSuperAdmin ? (
               <>
                 <li className='nav-item'>
                   <Link className='nav-link' to='/addProduct'>
@@ -45,12 +45,13 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
                     Cart
                   </Link>
                 </li>
-                <li className='nav-item'>
-                  <button className='btn text-white' onClick={handleLogout}>
-                    Log out
-                  </button>
-                </li>
               </>
+            ) : isAuthenticated ? (
+              <li className='nav-item'>
+                <button className='btn text-white' onClick={handleLogout}>
+                  Log out
+                </button>
+              </li>
             ) : (
               <>
                 <li className='nav-item'>

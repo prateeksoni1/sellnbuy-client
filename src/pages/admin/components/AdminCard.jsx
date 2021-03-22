@@ -24,10 +24,13 @@ const AdminCard = ({ admin, approve }) => {
         >
           <h4
             className='text-end display-6'
-            style={{ fontSize: '1.8rem', fontWeight: 'bold' }}
+            style={{ fontSize: '1rem', fontWeight: 'bold' }}
           >
             {contact}
           </h4>
+          {approve && (
+            <img src='/assets/check.svg' color='#40916c' alt='check icon' />
+          )}
         </div>
       </div>
     </div>

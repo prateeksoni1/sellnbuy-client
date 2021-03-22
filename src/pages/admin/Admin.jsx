@@ -6,7 +6,8 @@ import { toast } from 'react-toastify';
 import AdminCard from './components/AdminCard';
 
 const AdminPage = () => {
-  const [admins, setAdmins] = useState([]);
+  const [approvedAdmins, setApprovedAdmins] = useState([]);
+  const [pendingAdmins, setPendingAdmins] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -20,7 +21,13 @@ const AdminPage = () => {
           }
         );
 
-        setAdmins(response.data.users);
+        response.data.users.forEach(user => {
+          if (user.approved) {
+            setApprovedAdmins(approvedAdmins => [...approvedAdmins, user]);
+          } else {
+            setPendingAdmins(pendingAdmins => [...pendingAdmins, user]);
+          }
+        });
       } catch (err) {
         if (!err.response) {
           toast.error('Internal Server Error');
@@ -28,6 +35,7 @@ const AdminPage = () => {
       }
     })();
   }, []);
+
   const approve = async userId => {
     try {
       await axios.post(
@@ -41,33 +49,63 @@ const AdminPage = () => {
       );
 
       toast.success('Admin approved successfully');
-      setAdmins(admins =>
-        admins.map(admin =>
-          admin.id === userId ? { ...admin, approved: true } : admin
-        )
-      );
+
+      const newAdmin = pendingAdmins.find(admin => admin.id === userId);
+
+      setPendingAdmins(pendingAdmins.filter(admin => admin.id !== userId));
+
+      setApprovedAdmins([...approvedAdmins, newAdmin]);
     } catch (err) {
       if (!err.response) {
         toast.error('Internal Server Error');
       } else toast.error(err.response.data.message);
     }
   };
+
+  console.log({ approvedAdmins, pendingAdmins });
+
   return (
     <div style={{ minHeight: '95vh', backgroundColor: '#F0F1F5' }}>
       <div className='pt-4 container'>
+        <h4 className='display-4 text-center'>Admin Requests</h4>
+        <hr />
         <div className='row'>
-          {admins.length === 0 && (
-            <h4 className='display-5 text-center'>No Admin Requests</h4>
-          )}
-          {admins.map(admin => (
-            <div key={admin.id} className='col-md-3'>
-              <Card
-                style={{ backgroundColor: admin.approved ? '#d8f3dc' : '#fff' }}
-              >
-                <AdminCard admin={admin} approve={approve} />
-              </Card>
-            </div>
-          ))}
+          <div className='col-6'>
+            <h4 className='display-6'>Pending Requests</h4>
+            <hr />
+
+            {pendingAdmins.map(admin => (
+              <div key={admin.id} className='col-md-3'>
+                <Card
+                  style={{
+                    backgroundColor: '#fff',
+                    marginBottom: '2rem',
+                    minWidth: 'fit-content',
+                  }}
+                >
+                  <AdminCard admin={admin} approve={approve} />
+                </Card>
+              </div>
+            ))}
+          </div>
+          <div className='col-md-6'>
+            <h4 className='display-6'>Approved Admins</h4>
+            <hr />
+
+            {approvedAdmins.map(admin => (
+              <div key={admin.id} className='col-md-3'>
+                <Card
+                  style={{
+                    backgroundColor: '#d8f3dc',
+                    marginBottom: '2rem',
+                    minWidth: 'fit-content',
+                  }}
+                >
+                  <AdminCard admin={admin} />
+                </Card>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

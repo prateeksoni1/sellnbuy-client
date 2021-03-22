@@ -29,6 +29,7 @@ const AdminRoute = ({
           <Navbar
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
+            isSuperAdmin={isSuperAdmin}
           />
           <Component {...routeParams} />
         </>
