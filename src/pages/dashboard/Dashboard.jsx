@@ -41,7 +41,7 @@ const Dashboard = () => {
     }
   };
   return (
-    <div style={{ minHeight: '95vh', backgroundColor: '#F0F1F5' }}>
+    <div style={{ minHeight: '92vh', backgroundColor: '#F0F1F5' }}>
       <div className='pt-4 container'>
         <div className='row'>
           {products.length === 0 && (

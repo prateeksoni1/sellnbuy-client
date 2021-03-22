@@ -9,15 +9,16 @@ const Home = () => {
         className='d-flex flex-column justify-content-center align-items-center'
         style={{
           backgroundImage: `url(/assets/bg.jpg)`,
-          minHeight: '95vh',
+          minHeight: '92vh',
           width: '100vw',
           backgroundSize: 'cover',
         }}
       >
-        <h2 data-testid='message' className='display-4'>
-          Welcome to OSBD
+        <img src='/assets/logo.png' alt='company logo' height='150px' />
+        <h2 data-testid='message' className='display-5 mb-5'>
+          The best place to buy and sell your products
         </h2>
-        <Link className='mt-4 btn btn-primary btn-lg' to='/signin'>
+        <Link className='mt-5 btn btn-primary btn-lg' to='/signin'>
           Get Started Now
         </Link>
       </div>

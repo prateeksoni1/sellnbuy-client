@@ -94,7 +94,7 @@ const OrderHistory = () => {
               Total Items:{' '}
               {orders.reduce((count, order) => count + order.quantity, 0)}
             </h5>
-            <h5 className='ms-4 card-title'>
+            <h5 className='ms-auto card-title'>
               Total Price: &#x20B9;
               {orders.reduce(
                 (sum, order) => sum + order.Product.price * order.quantity,

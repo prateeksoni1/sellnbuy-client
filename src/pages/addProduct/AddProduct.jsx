@@ -21,7 +21,7 @@ const AddProduct = ({ history }) => {
   };
 
   return (
-    <div style={{ minHeight: '95vh', backgroundColor: '#F0F1F5' }}>
+    <div style={{ minHeight: '92vh', backgroundColor: '#F0F1F5' }}>
       <div className='pt-5 container' style={{ maxWidth: '30vw' }}>
         <Card>
           <div className='p-4'>

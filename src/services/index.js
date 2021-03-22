@@ -1,6 +1,6 @@
 import { signinUser, signupUser, getIsAuthenticated } from './authService';
 import { getAllProducts } from './productService';
-import { getCartItems, deleteFromCart } from './cartService';
+import { getCartItems, deleteFromCart, checkoutOrders } from './cartService';
 import { addProduct } from './productService';
 import { getOrderedProducts } from './orderHistoryService';
 import { getAdminRequests } from './superAdminService';
@@ -15,4 +15,5 @@ export {
   getOrderedProducts,
   getAdminRequests,
   getIsAuthenticated,
+  checkoutOrders,
 };

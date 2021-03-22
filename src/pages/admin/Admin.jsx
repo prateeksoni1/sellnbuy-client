@@ -49,7 +49,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div style={{ minHeight: '95vh', backgroundColor: '#F0F1F5' }}>
+    <div style={{ minHeight: '92vh', backgroundColor: '#F0F1F5' }}>
       <div className='pt-4 container'>
         <h4 className='display-4 text-center'>Admin Requests</h4>
         <hr />

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import Card from '../components/hoc/Card';
-import { deleteFromCart, getCartItems } from '../services';
+import { checkoutOrders, deleteFromCart, getCartItems } from '../services';
 
 const Cart = ({ history }) => {
   const [orders, setOrders] = useState([]);
@@ -72,20 +71,13 @@ const Cart = ({ history }) => {
 
   const handleCheckout = async () => {
     try {
-      await axios.post(
-        'http://localhost:8000/api/v1/orders/checkout',
-        {
-          orders: orders.reduce((orders, order) => {
-            order.ids.forEach(item => orders.push(item));
-            return orders;
-          }, []),
-        },
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem('authToken')}`,
-          },
-        }
+      await checkoutOrders(
+        orders.reduce((orders, order) => {
+          order.ids.forEach(item => orders.push(item));
+          return orders;
+        }, [])
       );
+
       toast.success('Products ordered successfully');
       history.push('/dashboard');
     } catch (err) {
@@ -151,7 +143,7 @@ const Cart = ({ history }) => {
               Total Items:{' '}
               {orders.reduce((count, order) => count + order.quantity, 0)}
             </h5>
-            <h5 className='ms-4 card-title'>
+            <h5 className='ms-auto card-title'>
               Total Price: &#x20B9;
               {orders.reduce(
                 (sum, order) => sum + order.Product.price * order.quantity,
@@ -159,10 +151,7 @@ const Cart = ({ history }) => {
               )}
             </h5>
             {orders.length > 0 && (
-              <button
-                className='ms-auto btn btn-success'
-                onClick={handleCheckout}
-              >
+              <button className='ms-4 btn btn-success' onClick={handleCheckout}>
                 Checkout
               </button>
             )}
