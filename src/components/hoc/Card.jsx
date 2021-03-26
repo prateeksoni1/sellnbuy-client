@@ -9,7 +9,7 @@ const Card = ({ children, style }) => {
         background: '#fff',
         ...style,
       }}
-      className='p-3'
+      className='p-3 container'
     >
       {children}
     </div>

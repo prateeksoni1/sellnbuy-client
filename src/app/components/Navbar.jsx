@@ -45,7 +45,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated, isSuperAdmin }) => {
                 </Link>
               </li>
             </ul>
-          ) : (
+          ) : !isAuthenticated ? (
             <ul className='ms-auto navbar-nav mb-2 mb-lg-0'>
               <li className='nav-item'>
                 <Link className='nav-link' to='/signin'>
@@ -58,7 +58,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated, isSuperAdmin }) => {
                 </Link>
               </li>
             </ul>
-          )}
+          ) : null}
           {isAuthenticated && (
             <ul className='ms-auto navbar-nav mb-2 mb-lg-0'>
               <li className='nav-item'>

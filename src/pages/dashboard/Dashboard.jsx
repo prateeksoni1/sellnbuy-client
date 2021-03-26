@@ -48,7 +48,7 @@ const Dashboard = () => {
             <h4 className='display-5 text-center'>No products found</h4>
           )}
           {products.map(product => (
-            <div key={product.id} className='col-md-3'>
+            <div key={product.id} className='col-md-3 mb-4'>
               <Card>
                 <ProductCard product={product} addToCart={addToCart} />
               </Card>
