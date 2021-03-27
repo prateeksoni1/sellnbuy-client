@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import AdminCard from './components/AdminCard';
 import { getAdminRequests } from '../../services';
-import { approveRequest } from '../../services/superAdminService';
+import { approveRequest, rejectRequest } from '../../services/superAdminService';
 
 const AdminPage = () => {
   const [approvedAdmins, setApprovedAdmins] = useState([]);
@@ -47,6 +47,23 @@ const AdminPage = () => {
       } else toast.error(err.response.data.message);
     }
   };
+  const reject = async userId => {
+    try {
+      await rejectRequest(userId);
+
+      toast.success('Admin Rejected successfully');
+
+      // const newAdmin = pendingAdmins.find(admin => admin.id === userId);
+
+      setPendingAdmins(pendingAdmins.filter(admin => admin.id !== userId));
+
+      setApprovedAdmins([...approvedAdmins]);
+    } catch (err) {
+      if (!err.response) {
+        toast.error('Internal Server Error');
+      } else toast.error(err.response.data.message);
+    }
+  };
 
   return (
     <div style={{ minHeight: '92vh', backgroundColor: '#F0F1F5' }}>
@@ -67,7 +84,7 @@ const AdminPage = () => {
                     minWidth: 'fit-content',
                   }}
                 >
-                  <AdminCard admin={admin} approve={approve} />
+                  <AdminCard admin={admin} approve={approve} reject={reject} />
                 </Card>
               </div>
             ))}

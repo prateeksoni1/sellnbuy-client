@@ -7,3 +7,7 @@ export const getAdminRequests = () => {
 export const approveRequest = userId => {
   return privateApi.post('/superadmin/approve', { userId });
 };
+
+export const rejectRequest = userId => {
+  return privateApi.post('/superadmin/reject', { userId });
+};
