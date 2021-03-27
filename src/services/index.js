@@ -1,5 +1,5 @@
 import { signinUser, signupUser, getIsAuthenticated } from './authService';
-import { getAllProducts } from './productService';
+import { getAllProducts, getUserProducts } from './productService';
 import { getCartItems, deleteFromCart, checkoutOrders } from './cartService';
 import { addProduct } from './productService';
 import { getOrderedProducts } from './orderHistoryService';
@@ -16,4 +16,5 @@ export {
   getAdminRequests,
   getIsAuthenticated,
   checkoutOrders,
+  getUserProducts,
 };

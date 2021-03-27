@@ -7,3 +7,7 @@ export const getAllProducts = () => {
 export const addProduct = data => {
   return privateApi.post('/products', data);
 };
+
+export const getUserProducts = data => {
+  return privateApi.get('/inventory');
+};
