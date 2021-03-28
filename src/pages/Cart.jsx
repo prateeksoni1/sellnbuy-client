@@ -94,7 +94,7 @@ const Cart = ({ history }) => {
             const { quantity, totalPrice } = order;
             const { id, name, image } = order.Product;
             return (
-              <div key={id} className='col-6 mt-2'>
+              <div key={id} className='col-md-6 col-sm-12 mt-2'>
                 <Card>
                   <div className='d-flex flex-row align-items-center'>
                     <div

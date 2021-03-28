@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import Navbar from '../../app/components/Navbar';
 
+import classes from './Home.module.css';
+
 const Home = () => {
   return (
     <>
@@ -15,7 +17,7 @@ const Home = () => {
         }}
       >
         <img src='/assets/logo.png' alt='company logo' height='150px' />
-        <h2 data-testid='message' className='display-5 mb-5'>
+        <h2 data-testid='message' className={`display-5 mb-5 ${classes.text}`}>
           The best place to buy and sell your products
         </h2>
         <Link className='mt-5 btn btn-primary btn-lg' to='/signin'>

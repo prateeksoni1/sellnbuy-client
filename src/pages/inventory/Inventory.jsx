@@ -60,6 +60,7 @@ const Inventory = () => {
               <Card
                 style={{
                   backgroundColor: isActive ? '#fff' : '#cdd0cb',
+                  marginBottom: '2rem',
                 }}
               >
                 <>
@@ -81,21 +82,23 @@ const Inventory = () => {
                       {name}
                     </h5>
                     <hr />
-                    <div
-                      onClick={() => removeProduct(id)}
-                      className='d-flex align-items-center justify-content-between'
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <img src='/assets/cart.svg' alt='cart logo' />
-                      <h4
-                        className='text-end display-6'
-                        style={{ fontSize: '1.8rem', fontWeight: 'bold' }}
+                    {isActive && (
+                      <div
+                        onClick={() => removeProduct(id)}
+                        className='d-flex align-items-center justify-content-between'
+                        style={{
+                          cursor: 'pointer',
+                        }}
                       >
-                        &#x20B9;{price}
-                      </h4>
-                    </div>
+                        <img src='/assets/trash.svg' alt='delete logo' />
+                        <h4
+                          className='text-end display-6'
+                          style={{ fontSize: '1.8rem', fontWeight: 'bold' }}
+                        >
+                          &#x20B9;{price}
+                        </h4>
+                      </div>
+                    )}
                   </div>
                 </>
               </Card>

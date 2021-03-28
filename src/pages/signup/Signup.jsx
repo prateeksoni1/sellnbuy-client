@@ -1,7 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import Navbar from '../app/components/Navbar';
-import { signupUser } from '../services';
+import Navbar from '../../app/components/Navbar';
+import { signupUser } from '../../services';
+
+import classes from './Signup.module.css';
 
 const Signup = ({ history }) => {
   const { register, handleSubmit, errors } = useForm();
@@ -19,7 +21,10 @@ const Signup = ({ history }) => {
   return (
     <>
       <Navbar />
-      <div className='mt-5 container' style={{ maxWidth: '30vw' }}>
+      <div
+        className={`mt-5 container ${classes.container}`}
+        style={{ maxWidth: '30vw' }}
+      >
         <h3 className='display-5 mb-4'>Register Now</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='mb-3'>

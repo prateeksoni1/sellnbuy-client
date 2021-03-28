@@ -49,7 +49,11 @@ const Dashboard = () => {
           )}
           {products.map(product => (
             <div key={product.id} className='col-md-3 mb-4'>
-              <Card>
+              <Card
+                style={{
+                  marginBottom: '2rem',
+                }}
+              >
                 <ProductCard product={product} addToCart={addToCart} />
               </Card>
             </div>

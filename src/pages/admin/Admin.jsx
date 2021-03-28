@@ -4,7 +4,10 @@ import { toast } from 'react-toastify';
 
 import AdminCard from './components/AdminCard';
 import { getAdminRequests } from '../../services';
-import { approveRequest, rejectRequest } from '../../services/superAdminService';
+import {
+  approveRequest,
+  rejectRequest,
+} from '../../services/superAdminService';
 
 const AdminPage = () => {
   const [approvedAdmins, setApprovedAdmins] = useState([]);
@@ -71,9 +74,13 @@ const AdminPage = () => {
         <h4 className='display-4 text-center'>Admin Requests</h4>
         <hr />
         <div className='row'>
-          <div className='col-6'>
-            <h4 className='display-6'>Pending Requests</h4>
-            <hr />
+          <div className='col-md-6 col-sm-12'>
+            {pendingAdmins.length > 0 && (
+              <>
+                <h4 className='display-6'>Pending Requests</h4>
+                <hr />
+              </>
+            )}
 
             {pendingAdmins.map(admin => (
               <div key={admin.id} className='col-md-3'>
@@ -89,7 +96,7 @@ const AdminPage = () => {
               </div>
             ))}
           </div>
-          <div className='col-md-6'>
+          <div className='col-md-6 col-sm-12'>
             <h4 className='display-6'>Approved Admins</h4>
             <hr />
 

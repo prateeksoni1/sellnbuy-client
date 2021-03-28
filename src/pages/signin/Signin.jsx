@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import Navbar from '../../app/components/Navbar';
 import { Link } from 'react-router-dom';
 import { signinUser } from '../../services';
+import classes from './Signin.module.css';
 
 const Signin = ({ history, setIsAuthenticated, setRole, setIsSuperAdmin }) => {
   const { register, handleSubmit, errors } = useForm();
@@ -30,7 +31,10 @@ const Signin = ({ history, setIsAuthenticated, setRole, setIsSuperAdmin }) => {
   return (
     <>
       <Navbar />
-      <div className='mt-5 container' style={{ maxWidth: '30vw' }}>
+      <div
+        className={`mt-5 container ${classes.container}`}
+        style={{ maxWidth: '30vw' }}
+      >
         <h3 className='display-5 mb-4'>Sign In</h3>
         {error && (
           <div className='alert alert-danger' role='alert'>

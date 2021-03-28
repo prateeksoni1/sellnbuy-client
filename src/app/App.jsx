@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
-import { BrowserRouter, Switch } from "react-router-dom";
-import Cart from "../pages/Cart";
-import Dashboard from "../pages/dashboard/Dashboard";
-import Home from "../pages/home/Home";
-import Signin from "../pages/signin/Signin";
-import Signup from "../pages/Signup";
-import AddProduct from "../pages/addProduct/AddProduct";
-import OrderHistory from "../pages/OrderHistory";
-import AdminPage from "../pages/admin/Admin";
-import AdminRoute from "./components/AdminRoute";
-import PrivateRoute from "./components/PrivateRoute";
-import PublicRoute from "./components/PublicRoute";
-import { getIsAuthenticated } from "../services";
-import Inventory from "../pages/inventory/Inventory"
-
+import { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { BrowserRouter, Switch } from 'react-router-dom';
+import Cart from '../pages/Cart';
+import Dashboard from '../pages/dashboard/Dashboard';
+import Home from '../pages/home/Home';
+import Signin from '../pages/signin/Signin';
+import Signup from '../pages/signup/Signup';
+import AddProduct from '../pages/addProduct/AddProduct';
+import OrderHistory from '../pages/OrderHistory';
+import AdminPage from '../pages/admin/Admin';
+import AdminRoute from './components/AdminRoute';
+import PrivateRoute from './components/PrivateRoute';
+import PublicRoute from './components/PublicRoute';
+import { getIsAuthenticated } from '../services';
+import Inventory from '../pages/inventory/Inventory';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState();
@@ -65,57 +64,57 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           <AdminRoute
-            path="/admin"
+            path='/admin'
             component={AdminPage}
             isSuperAdmin={isSuperAdmin}
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
             role={role}
-            allowedRole={["superAdmin"]}
+            allowedRole={['superAdmin']}
           />
           <PrivateRoute
-            path="/dashboard"
+            path='/dashboard'
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
             role={role}
             component={Dashboard}
-            allowedRole={["admin", "user", "superAdmin"]}
+            allowedRole={['admin', 'user', 'superAdmin']}
           />
           <PrivateRoute
-            path="/cart"
+            path='/cart'
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
             role={role}
             component={Cart}
-            allowedRole={["user"]}
+            allowedRole={['user']}
           />
           <PrivateRoute
-            path="/inventory"
+            path='/inventory'
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
             role={role}
             component={Inventory}
-            allowedRole={["user"]}
+            allowedRole={['user']}
           />
           <PrivateRoute
-            path="/orderHistory"
+            path='/orderHistory'
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
             role={role}
             component={OrderHistory}
-            allowedRole={["user"]}
+            allowedRole={['user']}
           />
           <PrivateRoute
-            path="/addProduct"
+            path='/addProduct'
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
             role={role}
             component={AddProduct}
-            allowedRole={["admin", "user"]}
+            allowedRole={['admin', 'user']}
           />
 
           <PublicRoute
-            path="/signin"
+            path='/signin'
             isAuthenticated={isAuthenticated}
             component={Signin}
             setIsAuthenticated={setIsAuthenticated}
@@ -123,12 +122,12 @@ const App = () => {
             setRole={setRole}
           />
           <PublicRoute
-            path="/signup"
+            path='/signup'
             isAuthenticated={isAuthenticated}
             component={Signup}
           />
           <PublicRoute
-            path="/"
+            path='/'
             isAuthenticated={isAuthenticated}
             component={Home}
             exact
